@@ -11,8 +11,14 @@
 ### [感谢认真看完作者吹牛的短文]
 
 # Android应用界面截图
-![链接采集](images/1.png "图片描述")
-
+<img src="images/1.png" alt="描述" width="200" />
+<img src="images/2.png" alt="描述" width="200" />
+<img src="images/3.png" alt="描述" width="200" />
+<img src="images/4.png" alt="描述" width="200" />
+<img src="images/5.png" alt="描述" width="500" />
+<img src="images/6.png" alt="描述" width="500" />
+<img src="images/7.png" alt="描述" width="500" />
+<img src="images/8.png" alt="描述" width="500" />
 **提示：**
 **本软件用Dart语言写的，用的material风格，目前只有Android和Windows版本，如果需要linux版本和iOS版本可以自行生成，修改源代码并发行的时候希望严格遵守App内提到的协议。谢谢**
 
