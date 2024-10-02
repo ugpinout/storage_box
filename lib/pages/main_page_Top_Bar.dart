@@ -31,8 +31,8 @@ class _Top_BarState extends State<Top_Bar> {
               size: 30.0,
             ),
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Search_Page()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Search_Page()));
             },
           ),
           appBarColor: Colors.yellow,

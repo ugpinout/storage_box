@@ -421,6 +421,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.2"
+  text_mask:
+    dependency: "direct main"
+    description:
+      name: text_mask
+      sha256: aedeb8cb1459ff5a59aef63bb8322b2ff05ed60b05ba9b65d35dcff955c95bc4
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   typed_data:
     dependency: transitive
     description:

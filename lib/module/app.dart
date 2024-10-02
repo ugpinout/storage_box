@@ -10,7 +10,9 @@
 10004：写入单个箱子数据失败，可能没有给权限，建议给权限或重装
 10005：删除箱子文件失败，箱子文件不在或者没有权限
 10006：复制文件到根目录失败，可能没有给权限，建议给权限或重装
-
+10007：搭建Socket服务器失败，可能没有网络或者端口被占用，建议查询网络和重新打开socket
+10008：初始化参数有问题，可能搭建Socket后按返回键出了问题，重启应用
+10009: 关掉一打开的Socket服务器的时候出问题，我也不知道怎么处理，重启吧
 */
 
 import 'dart:io';
@@ -58,6 +60,49 @@ class App extends ChangeNotifier {
   List<List> Item_data = [
     [114114, '可能出错啦', 0],
   ];
+
+// Socket 数据
+  Map<String, dynamic> Socket_Var = {
+    "Connect_Mode": '未选择', //创建模式
+    "Connect_type": '未连接', //连接状态
+    "Local_IP": '0.0.0.0', //本地IP
+    "Local_Port": '0000', //本地端口
+    "Remote_IP": '未连接', //远程IP
+    "Remote_Port": '0000', //远程端口
+    "Connect_Mode_Color": Colors.red, //创建模式颜色
+    "Connect_type_Color": Colors.red, //连接状态颜色
+    "Connect_addr_Color": Colors.red, //连接状态颜色
+    "Client_IP": [], //客户端IP
+    "Client_Port": [], //客户端端口
+    "Client_Data": [], //客户端数据
+  };
+//成功发送或接收的文件
+  List<String> _sendOrAddSuccessFileList = [];
+  List<String> get sendOrAddSuccessFileList => _sendOrAddSuccessFileList;
+  void addFile(String fileName) {
+    _sendOrAddSuccessFileList.add(fileName);
+    notifyListeners(); // 通知监听者更新
+  }
+
+//重置socket数据
+  void reset_Socket_Var() {
+    _sendOrAddSuccessFileList = [];
+    Socket_Var = {
+      "Connect_Mode": '未选择', //创建模式
+      "Connect_type": '未连接', //连接状态
+      "Local_IP": '0.0.0.0', //本地IP
+      "Local_Port": '0000', //本地端口
+      "Remote_IP": '未连接', //远程IP
+      "Remote_Port": '0000', //远程端口
+      "Connect_Mode_Color": Colors.red, //创建模式颜色
+      "Connect_type_Color": Colors.red, //连接状态颜色
+      "Connect_addr_Color": Colors.red, //连接状态颜色
+      "Client_IP": [], //客户端IP
+      "Client_Port": [], //客户端端口
+      "Client_Data": [], //客户端数据
+    };
+    notifyListeners();
+  }
 
 // 搜索数据列表
   List<List> Search_data = [

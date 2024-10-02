@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Socket.dart';
+import 'package:flutter_application_1/module/SocketManager.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shirne_dialog/shirne_dialog.dart';
 
@@ -109,10 +111,25 @@ class left_menu extends StatelessWidget {
             ListTile(
               tileColor: Colors.white,
               dense: true,
+              leading: const Icon(Icons.lan),
+              title: const Text('局域网跨设备传数据'),
+              subtitle: const Text('一台设备的数据复制到别的设备',
+                  style: TextStyle(fontSize: 10.0)),
+              trailing: const Icon(Icons.arrow_right),
+              onTap: () => {
+                // 备份/恢复数据按钮按下的时候触发的事件
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const Socket_Page())),
+                sliderKey.currentState!.toggle(),
+              },
+            ),
+            ListTile(
+              tileColor: Colors.white,
+              dense: true,
               leading: const Icon(Icons.import_export),
               title: const Text('导入/导出数据'),
               subtitle:
-                  const Text('本地上保存或者导出数据', style: TextStyle(fontSize: 10.0)),
+                  const Text('在本地导入或导出数据', style: TextStyle(fontSize: 10.0)),
               trailing: const Icon(Icons.arrow_right),
               // 导入/导出数据按钮按下的时候触发的事件
               onTap: () => {
@@ -221,7 +238,7 @@ class left_menu extends StatelessWidget {
                             child: const SingleChildScrollView(
                               child: Column(children: [
                                 Text(
-                                    '用户协议\n1. 许可协议\n本应用使用[MIT协议]授权，您可以在[https://mit-license.org/]中查看完整的许可证条款。您有权修改本应用的源代码，但必须遵守以下条件。\n2. 使用限制\n本应用仅供个人非商业使用。禁止将本应用用于商业目的。\n允许修改本应用的源代码，但不得将修改后的版本用于销售或商业分发。\n禁止以任何形式出售、转售或将本应用的副本用于商业目的。\n3. 免责条款\n本应用按“现状”提供，不提供任何明示或暗示的保证。使用本应用的风险由用户自担。我们不对因使用本应用而产生的任何直接或间接损失承担责任。\n4. 隐私政\n我们可能会收集一些用户数据，用于改进应用性能。我们保证官网渠道下载的版本不会主动上传用户的任何信息在网上。\n5. 法律适用\n本协议适用[开发者所在地法律]。因本协议引发的争议应提交至[开发者户籍所在地]解决。\n6. 联系方式\n如有任何疑问或需要进一步的信息，请通过以下方式与我们联系：\nQQ：2280711844\n Email:2280711844@qq.com'),
+                                    '用户协议\n1. 许可协议\n本应用使用[MIT协议]授权，您可以在[https://mit-license.org/]中查看完整的许可证条款。您有权修改本应用的源代码，但必须遵守以下条件。\n2. 使用限制\n本应用仅供个人非商业使用。禁止将本应用用于商业目的。\n允许修改本应用的源代码，但不得将修改后的版本用于销售或商业分发。\n禁止以任何形式出售、转售或将本应用的副本用于商业目的。\n3. 免责条款\n本应用按“现状”提供，不提供任何明示或暗示的保证。使用本应用的风险由用户自担。我们不对因使用本应用而产生的任何直接或间接损失承担责任。\n4. 隐私政\n我们可能会收集一些用户数据，用于改进应用性能。我们保证官网渠道下载的版本不会主动上传用户的任何信息在网上。\n5. 法律适用\n本协议适用[开发者所在地法律]。因本协议引发的争议应提交至[开发者户籍所在地]解决。\n6. 联系方式\n如有任何疑问或需要进一步的信息，请通过以下方式与我们联系：\nQQ：2280711844\n Email:2280711844@qq.com\n代码开源地址:\nhttps://github.com/ugpinout/storage_box\nhttps://gitee.com/infinite0078/storage_box'),
                               ]),
                             )),
                       );
@@ -254,7 +271,7 @@ class left_menu extends StatelessWidget {
                             child: const SingleChildScrollView(
                               child: Column(children: [
                                 Text(
-                                    '介绍：\n收纳盒App是整理和管理物品的好帮手。无论是家庭用品、办公文具、个人物品还是电子零件，这款App帮助您高效地记录和追踪每一个物品的数量。用户可以轻松创建多个收纳盒，添加物品，并通过直观的界面查看详细信息。\n功能亮点：\n简易管理：快速添加和编辑物品，实时更新数量。\n分类整理：按类别和标签组织物品，轻松找到所需。\n分享功能：与家人或团队共享箱子信息。\n结语：\n无论您是想要保持家庭井井有条，还是希望在办公环境中提高效率，收纳盒App都能满足您的需求！\n联系方式：\nQQ：2280711844\n Email:2280711844@qq.com\n[感谢认真看完作者吹牛的短文]'),
+                                    '介绍：应用版本1.0.1 Beta\n收纳盒App是整理和管理物品的好帮手。无论是家庭用品、办公文具、个人物品还是电子零件，这款App帮助您高效地记录和追踪每一个物品的数量。用户可以轻松创建多个收纳盒，添加物品，并通过直观的界面查看详细信息。\n功能亮点：\n简易管理：快速添加和编辑物品，实时更新数量。\n分类整理：按类别和标签组织物品，轻松找到所需。\n分享功能：与家人或团队共享箱子信息。\n结语：\n无论您是想要保持家庭井井有条，还是希望在办公环境中提高效率，收纳盒App都能满足您的需求！\n联系方式：\nQQ：2280711844\n Email:2280711844@qq.com\n[感谢认真看完作者吹牛的短文]'),
                               ]),
                             )),
                       );

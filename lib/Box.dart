@@ -16,7 +16,8 @@ Item_Manager itemManager = Item_Manager();
 
 class Box_Item extends StatefulWidget {
   final String names;
-  const Box_Item({super.key, required this.names});
+  final String item_names;
+  const Box_Item({super.key, required this.names, required this.item_names});
 
   @override
   _Box_Item createState() {
@@ -64,6 +65,7 @@ class _Box_Item extends State<Box_Item> {
                 text: app.Item_data[index][1],
                 count: app.Item_data[index][2],
                 item_id: app.Item_data[index][0],
+                selects: widget.item_names,
               );
             }),
       );

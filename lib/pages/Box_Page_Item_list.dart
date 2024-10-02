@@ -17,12 +17,14 @@ class CustomListItem extends StatefulWidget {
   final String text;
   final int count;
   final int item_id;
+  final String selects;
   const CustomListItem(
       {super.key,
       required this.icon,
       required this.text,
       required this.count,
-      required this.item_id});
+      required this.item_id,
+      required this.selects});
   @override
   _CustomListItem createState() {
     return _CustomListItem();
@@ -41,13 +43,12 @@ class _CustomListItem extends State<CustomListItem> {
 
   @override
   Widget build(BuildContext context) {
+    Color textColor =
+        (widget.selects == widget.text) ? Colors.green : Colors.black;
     return ListTile(
       leading: Icon(widget.icon),
-      title: Text(widget.text, style: const TextStyle(fontSize: 16)),
-      // subtitle: Text(
-      //   "${widget.item_id}",
-      //   style: const TextStyle(color: Colors.black),
-      // ),
+      title:
+          Text(widget.text, style: TextStyle(fontSize: 16, color: textColor)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

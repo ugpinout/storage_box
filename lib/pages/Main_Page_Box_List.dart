@@ -43,8 +43,11 @@ class _Image_BoxState extends State<Image_Box> {
               //箱子单击事件
               String id = Provider.of<App>(context, listen: false).Box_data[
                   Provider.of<App>(context, listen: false).Box_Name[index]]!;
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => Box_Item(names: id)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Box_Item(
+                        names: id,
+                        item_names: 'None',
+                      )));
             },
             onLongPress: () {
               //箱子长按事件

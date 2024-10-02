@@ -41,7 +41,8 @@ class _CustomListItem extends State<CustomListItem> {
           showToast('先搜索吧', notifyTypes: 'warning');
         } else {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Box_Item(names: widget.Box_ID)));
+              builder: (context) => Box_Item(
+                  names: widget.Box_ID, item_names: widget.Item_name)));
         }
       },
     );
@@ -67,15 +68,17 @@ void Search_Item(context, String txts, app) {
     var txt = boxManager.Get_One_Box_Data(id);
 
     for (String i in txt['Item_Data'].keys) {
-      if (txt['Item_Data'][i]['Item_Name'].toString().contains(txts)) {
+      // if (txt['Item_Data'][i]['Item_Name'].toString().contains(txts)) {
+      if (txt['Item_Data'][i]['Item_Name']
+          .toString()
+          .toLowerCase()
+          .contains(txts.toLowerCase())) {
         List<String> Temp = [
           txt['Item_Data'][i]['Item_Name'],
           txt['Box_Name'],
           id
         ];
         Search_result.add(Temp);
-      } else {
-        print('无');
       }
     }
   }
