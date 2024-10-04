@@ -317,6 +317,7 @@ Future<void> send_file(data, app) async {
       .every((subArray) => subArray.length > 2 && subArray[2] == false)) {
     showToast('啊？什么都没选？发送？', notifyTypes: 'failure');
   } else {
+    SmartDialog.dismiss();
     for (List item in data) {
       if (item[2] == true) {
         await socketmanager.send_data(item[1].toString()).then((val) {});

@@ -3,6 +3,8 @@ package="com.Flutter.Material.Box">
 <!--此处为单独添加的权限代码  -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="收纳盒"
         android:name="${applicationName}"
