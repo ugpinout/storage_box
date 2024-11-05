@@ -7,7 +7,6 @@ import '../module/FileManager.dart';
 import '../module/app.dart';
 import '../Box.dart';
 
-App app = App();
 File_Manager fileManager = File_Manager();
 
 class Image_Box extends StatefulWidget {
@@ -112,6 +111,19 @@ class _Image_BoxState extends State<Image_Box> {
                               fileManager.Copy_File_To_Dir(id),
                             },
                           ),
+                          ListTile(
+                            dense: true,
+                            leading: const Icon(Icons.delete_forever),
+                            title: const Text(
+                              '批量删除箱子',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            // 批量删除箱子按钮按下的时候触发的事件
+                            onTap: () => {
+                              Navigator.of(context).pop(),
+                              _delete_box_dialog_all(context),
+                            },
+                          ),
                           Expanded(
                             child: Container(), // 用于填充空白空间
                           ),
@@ -150,6 +162,122 @@ class _Image_BoxState extends State<Image_Box> {
       },
     );
   }
+}
+
+//批量删除箱子对话框
+void _delete_box_dialog_all(context) {
+  Map<String, String> box_data = {};
+  box_data = boxManager.Create_Box_Data_Map(
+      fileManager.Get_All_file_Name(context),
+      boxManager.Get_All_Box_Name(
+          context, fileManager.Get_All_file_Name(context)));
+
+  List<List<dynamic>> transformedData = box_data.entries.map((entry) {
+    String key = entry.key;
+    String value = entry.value;
+    bool isSelected = false;
+    return [key, int.parse(value), isSelected];
+  }).toList();
+
+  SmartDialog.show(
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: SizedBox(
+          width: 300, // 设置对话框的宽度
+          height: 500, // 设置对话框的高度
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text('箱子列表', style: TextStyle(fontSize: 20)),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: transformedData.length,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              child: Checkbox(
+                                value: transformedData[index][2],
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    transformedData[index][2] = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                            Text(transformedData[index][0]),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            // 全选
+                            setState(() {
+                              for (var item in transformedData) {
+                                item[2] = true;
+                              }
+                            });
+                          },
+                          icon: const Icon(Icons.select_all),
+                        ),
+                        Expanded(child: Container()),
+                        IconButton(
+                            // 删除按钮
+                            onPressed: () async => {
+                                  for (var item in transformedData)
+                                    {
+                                      if (item[2])
+                                        {
+                                          boxManager.Del_one_Box(item[1]),
+                                          update.Update_Box_Data(context),
+                                          await Future.delayed(
+                                              const Duration(milliseconds: 50)),
+                                        }
+                                    },
+                                  //按钮禁止使用
+
+                                  SmartDialog.dismiss(),
+                                  showToast('删除成功'),
+                                },
+                            icon: const Icon(Icons.delete)),
+                        Expanded(child: Container()),
+                        IconButton(
+                          onPressed: () {
+                            // 取消全选
+                            setState(() {
+                              for (var item in transformedData) {
+                                item[2] = false;
+                              }
+                            });
+                          },
+                          icon: const Icon(Icons.deselect),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
 }
 
 // 删除箱子对话框

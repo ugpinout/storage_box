@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.Flutter.Material.Box"
+    namespace = "com.example.storage_box"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

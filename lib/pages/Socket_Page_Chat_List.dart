@@ -57,7 +57,7 @@ void connect_Mode_select_Dialog(context, app) {
             padding: const EdgeInsets.only(top: 10),
             width: 290,
             child: ElevatedButton(
-              onPressed: () => connect_clinet(app),
+              onPressed: () => connect_clinet(app, context),
               child: const Text('连接房间 - [接收数据]'),
             ),
           ),
@@ -85,7 +85,7 @@ void connect_Mode_select_Dialog(context, app) {
 }
 
 //连接服务器
-void connect_clinet(app) {
+void connect_clinet(app, context) {
   SmartDialog.dismiss();
   TextEditingController IPEditor = TextEditingController();
   TextEditingController PortEditor = TextEditingController();
@@ -114,7 +114,7 @@ void connect_clinet(app) {
                         inputFormatters: [
                           // FilteringTextInputFormatter.digitsOnly,
                           FilteringTextInputFormatter.allow(RegExp(r'[.0-9]')),
-                          LengthLimitingTextInputFormatter(12),
+                          LengthLimitingTextInputFormatter(15),
                         ],
                         decoration:
                             const InputDecoration(label: Text('IP 地址'))),
@@ -156,7 +156,7 @@ void connect_clinet(app) {
                     showToast('哈↑哈↓', notifyTypes: 'alert');
                   } else {
                     socketmanager.Connect_Socket(
-                            IPEditor.text, int.parse(PortEditor.text))
+                            IPEditor.text, int.parse(PortEditor.text), context)
                         .then((type) {
                       if (type == true) {
                         app.Socket_Var['Connect_Mode'] = '接收模式';
@@ -322,7 +322,7 @@ Future<void> send_file(data, app) async {
       if (item[2] == true) {
         await socketmanager.send_data(item[1].toString()).then((val) {});
         app.addFile(item[0]);
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 150));
       }
     }
   }

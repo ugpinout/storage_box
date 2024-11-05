@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, file_names, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, void_checks
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/module/FileManager.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/module/app.dart';
 import 'package:flutter_application_1/module/toast.dart';
 import 'package:flutter_application_1/pages/Socket_Page_Chat_List.dart';
@@ -30,7 +30,7 @@ class _Socket_Page extends State<Socket_Page> {
   @override
   void dispose() {
     super.dispose();
-    app.notifyListeners();
+    //
   }
 
   @override
@@ -43,11 +43,13 @@ class _Socket_Page extends State<Socket_Page> {
               socketmanager.Close_Socket_clinet();
               socketmanager.Close_Socket_server();
               app.reset_Socket_Var();
+              update.Update_Box_Data(context);
             } else {
               showToast('[错误10008]初始化参数有问题，下次传输数据前务必重启应用',
                   notifyTypes: "failure");
             }
             if (Navigator.canPop(context)) {
+              update.Update_Box_Data(context);
               Navigator.pop(context);
             }
           },
@@ -64,6 +66,7 @@ class _Socket_Page extends State<Socket_Page> {
                 leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
+                      update.Update_Box_Data(context);
                       socketmanager.Close_Socket_clinet();
                       socketmanager.Close_Socket_server();
                       app.reset_Socket_Var();

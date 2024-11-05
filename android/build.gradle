@@ -1,9 +1,18 @@
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+        // google()
+        // mavenCentral()
+        // maven { url "https://jcenter.bintray.com/" }
+        // maven { url 'https://maven.aliyun.com/repository/google' }
+        
+        // // maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        // maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://mirrors.tencent.com/nexus/repository/maven-public/' } // 腾讯云仓库
+        mavenCentral()  
+
     }
 }
+
 
 rootProject.buildDir = "../build"
 subprojects {

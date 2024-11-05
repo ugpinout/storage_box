@@ -42,12 +42,14 @@ class Update {
     app.notifyListeners();
   }
 
+// 获取当前时间戳
   get_Now_Time() {
     return DateTime.now().millisecondsSinceEpoch.toString();
   }
 
+// 判断是否破坏Json格式
   bool is_breaking_Json_Format(json_string) {
-    final RegExp validJsonRegExp = RegExp(r'^[\w\s.,_@()\[\]\u4e00-\u9fa5]+$');
+    final RegExp validJsonRegExp = RegExp(r'^[\w\s.,_()\[\]\u4e00-\u9fa5]+');
     return !validJsonRegExp.hasMatch(json_string);
   }
 }

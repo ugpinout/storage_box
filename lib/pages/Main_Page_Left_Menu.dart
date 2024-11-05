@@ -7,6 +7,7 @@ import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Socket.dart';
+import 'package:flutter_application_1/module/ExcelManager.dart';
 import 'package:flutter_application_1/module/SocketManager.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shirne_dialog/shirne_dialog.dart';
@@ -19,6 +20,7 @@ import '../module/BoxManager.dart';
 Update update = Update();
 File_Manager fileManager = File_Manager();
 Box_Manager boxManager = Box_Manager();
+Excelmanager excelmanager = Excelmanager();
 
 class left_menu extends StatelessWidget {
   final dynamic sliderKey;
@@ -285,6 +287,7 @@ class left_menu extends StatelessWidget {
   }
 }
 
+// 导入导出箱子
 void _import_export_box(BuildContext context) {
   SmartDialog.show(builder: (_) {
     return Container(
@@ -304,8 +307,7 @@ void _import_export_box(BuildContext context) {
           child: Container(), // 用于填充空白空间
         ),
         ElevatedButton(
-          onPressed: () =>
-              {SmartDialog.dismiss(), boxManager.Compress_All_Box()},
+          onPressed: () => Export_Box(context),
           child: const Text('导出箱子'),
         )
       ]),
@@ -313,12 +315,55 @@ void _import_export_box(BuildContext context) {
   });
 }
 
+// 导出箱子
+void Export_Box(context) {
+  SmartDialog.dismiss();
+  SmartDialog.show(builder: (_) {
+    return Container(
+      width: 150,
+      height: 100,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () => boxManager.Compress_All_Box(),
+            child: const Text(
+              '导出所有箱子[zip]',
+              style: TextStyle(fontSize: 11),
+            ),
+          ),
+          Expanded(
+            child: Container(), // 用于填充空白空间
+          ),
+          ElevatedButton(
+            onPressed: () => Export_BOX_Excel(context),
+            child: const Text(
+              '导出所有箱子[Excel]',
+              style: TextStyle(fontSize: 11),
+            ),
+          ),
+        ],
+      ),
+    );
+  });
+}
+
+// 导出Excel
+void Export_BOX_Excel(context) {
+  excelmanager.Export_To_Excel(context);
+}
+
+// 导入单个文件
 void import_box(context) {
   SmartDialog.dismiss(force: true);
   SmartDialog.show(builder: (_) {
     return Container(
       width: 150,
-      height: 100,
+      height: 150,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -335,12 +380,26 @@ void import_box(context) {
         ElevatedButton(
           onPressed: () => import_box_json(context, app),
           child: const Text('单个箱子[json]'),
-        )
+        ),
+        // Expanded(
+        //   child: Container(), // 用于填充空白空间
+        // ),
+        // ElevatedButton(
+        //   onPressed: () => Import_Box_Excel(context),
+        //   child: const Text('导入Excel'),
+        // )
       ]),
     );
   });
 }
 
+// 导入Excel
+void Import_Box_Excel(context) {
+  SmartDialog.dismiss();
+  excelmanager.Import_Excel_To_File(context);
+}
+
+// 导入zip文件
 void Import_Box_Zip(BuildContext context, app) async {
   FilePickerResult? result = await FilePicker.platform.pickFiles();
   if (result!.files.single.path.toString().endsWith('zip')) {
@@ -348,7 +407,6 @@ void Import_Box_Zip(BuildContext context, app) async {
     final archive = ZipDecoder().decodeBytes(bytes);
     for (final file in archive) {
       if (file.isFile == true && file.toString().endsWith('.json')) {
-        print(app.prj_path);
         fileManager.Create_New_File(
             app.prj_path, update.get_Now_Time(), utf8.decode(file.content));
       }
@@ -363,6 +421,7 @@ void Import_Box_Zip(BuildContext context, app) async {
   }
 }
 
+// 导入json文件
 void import_box_json(BuildContext context, app) async {
   FilePickerResult? result = await FilePicker.platform.pickFiles();
   if (result!.files.single.path.toString().endsWith('json')) {

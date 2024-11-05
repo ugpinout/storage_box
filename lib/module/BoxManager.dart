@@ -14,6 +14,7 @@ import 'FileManager.dart';
 File_Manager fileManager = File_Manager();
 
 class Box_Manager {
+  //创建一个箱子
   Create_New_Box(Box_Name) {
     if (fileManager.Create_New_File(
         app.prj_path,
@@ -99,12 +100,13 @@ class Box_Manager {
       String? path = await FilePicker.platform.getDirectoryPath();
       if (path != null) {
         var encoder = ZipFileEncoder();
+
         await encoder.zipDirectoryAsync(Directory(app.prj_path),
             filename: "$path/${update.get_Now_Time()}.zip");
         showToast('导出成功');
       }
     } catch (e) {
-      showToast('[错误10007]压缩失败', notifyTypes: "failure");
+      showToast('[错误10012]压缩失败', notifyTypes: "failure");
     }
   }
 }

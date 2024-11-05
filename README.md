@@ -20,10 +20,29 @@
 <img src="images/6.png" alt="描述" width="500" />
 <img src="images/7.png" alt="描述" width="500" />
 <img src="images/8.png" alt="描述" width="500" />
+<img src="images/9.png" alt="描述" width="500" />
+<img src="images/10.png" alt="描述" width="500" />
 
 ---
 
 > 四、版本管理
+
+
+## V1.0.2 BETA
+**新功能：**
+- 1.添加了批量删除箱子的功能
+- 2.添加了导入导出Excel表格的功能
+
+**修改的Bug:**
+
+- socket获取的箱子数据无法及时显示在主页面的Bug修复了
+- 修复了连接房间时输入的IP地址数量超过12个后无法输入的Bug，现在最多输入到255.255.255.255
+
+**预告：**
+- 下个版本优化搜索功能，支持公式化搜索
+- 下个版本修改已知的Bug
+
+---
 
 ## V1.0.1 BETA
 **新功能：**

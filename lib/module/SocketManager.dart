@@ -17,6 +17,7 @@ class Socket_Manager {
   Socket? currentclinet; //存储当前客户端
   Socket? servernum;
 
+//创建socket服务器
   Future<void> Create_Socket(int Port) async {
     try {
       // 如果当前有服务器实例，先关闭它
@@ -58,7 +59,6 @@ class Socket_Manager {
   void handleClient(Socket socket) {
     socket.listen((data) {
       // 处理接收到的数据
-      print('Received: ${utf8.decode(data)}');
 
       // 回复客户端
       socket.write('Message received');
@@ -111,12 +111,12 @@ class Socket_Manager {
   }
 
 //创建socket客户端，连接 Socket 服务器
-  Future<bool> Connect_Socket(dynamic ip, int Port) async {
+  Future<bool> Connect_Socket(dynamic ip, int Port, context) async {
     try {
       // 连接到服务器
       currentclinet = await Socket.connect(ip, Port);
       showToast('已连接到服务器');
-      connect_clinet_handle(currentclinet);
+      connect_clinet_handle(currentclinet, context);
       // 监听服务器的响应
 
       return true;
@@ -127,7 +127,7 @@ class Socket_Manager {
   }
 
 // 送服务器来的数据接收
-  void connect_clinet_handle(socket) {
+  void connect_clinet_handle(socket, context) {
     socket.listen(
       (data) {
         saveToFile(data);
@@ -150,9 +150,9 @@ class Socket_Manager {
     String boxName = jsonData['Box_Name'];
     // 将 Box_Name 添加到成功文件列表或其他变量中
     Apps.addFile(boxName);
-    print(Apps.sendOrAddSuccessFileList);
+
     // 通知 listeners
-    app.notifyListeners();
+    // app.notifyListeners();
   }
 
 //服务器给客户端发消息，
