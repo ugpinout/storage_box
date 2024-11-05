@@ -74,7 +74,9 @@
 **提示：**
 
 本软件用Dart语言写的，用的material风格，目前只有Android和Windows版本，如果需要linux版本和iOS版本可以自行生成，修改源代码并发行的时候希望严格遵守App内提到的协议。谢谢。
-
+github仓库地址：https://github.com/ugpinout/storage_box
 gitte仓库地址：https://gitee.com/infinite0078/storage_box [github优先更新]
+gitcode仓库地址：https://gitcode.com/weixin_44021214/Storage_Box
+
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
