@@ -2,12 +2,11 @@
 // ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, use_build_context_synchronously, use_function_type_syntax_for_parameters, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/module/Update.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shirne_dialog/shirne_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-//页面路径
+import 'package:demo/module/Update.dart';
 import 'module/app.dart';
 import 'pages/main_page_Top_Bar.dart';
 import 'module/FileManager.dart';
@@ -17,6 +16,7 @@ App app = App();
 Update update = Update();
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => App())],
       child: const MainPage()));

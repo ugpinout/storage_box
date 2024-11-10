@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/Box.dart';
-import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/module/BoxManager.dart';
-import 'package:flutter_application_1/module/Update.dart';
-import 'package:flutter_application_1/module/toast.dart';
+import 'package:demo/Box.dart';
+import 'package:demo/main.dart';
+import 'package:demo/module/BoxManager.dart';
+import 'package:demo/module/Update.dart';
+import 'package:demo/module/toast.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 Update update = Update();

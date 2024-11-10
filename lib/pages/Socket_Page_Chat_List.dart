@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/Box.dart';
-import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/module/SocketManager.dart';
-import 'package:flutter_application_1/module/toast.dart';
+import 'package:demo/Box.dart';
+import 'package:demo/main.dart';
+import 'package:demo/module/SocketManager.dart';
+import 'package:demo/module/toast.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:text_mask/text_mask.dart';
 

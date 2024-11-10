@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:flutter_application_1/Box.dart';
-import 'package:flutter_application_1/Socket.dart';
-import 'package:flutter_application_1/module/FileManager.dart';
-import 'package:flutter_application_1/module/toast.dart';
+import 'package:demo/Box.dart';
+import 'package:demo/Socket.dart';
+import 'package:demo/module/FileManager.dart';
+import 'package:demo/module/toast.dart';
 
 class Socket_Manager {
   String localIP = '0.0.0.0';

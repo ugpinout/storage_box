@@ -1,9 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/module/app.dart';
-import 'package:flutter_application_1/module/toast.dart';
-import 'package:flutter_application_1/pages/Search_Page_Item_List.dart';
+import 'package:demo/module/app.dart';
+import 'package:demo/module/toast.dart';
+import 'package:demo/pages/Search_Page_Item_List.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
