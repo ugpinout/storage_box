@@ -1,19 +1,15 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, non_constant_identifier_names
 //导出成Excel
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
-// import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:demo/module/FileManager.dart';
-import 'package:demo/module/Update.dart';
-import 'package:demo/module/app.dart';
-import 'package:demo/module/toast.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:storage_box/module/FileManager.dart';
+import 'package:storage_box/module/Update.dart';
+import 'package:storage_box/module/toast.dart';
 import 'package:flutter_excel/excel.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:provider/provider.dart';
 
 Update update = Update();
 File_Manager fileManager = File_Manager();
@@ -21,53 +17,53 @@ File_Manager fileManager = File_Manager();
 class Excelmanager {
   //箱子导出到Excel
   Future<void> Export_To_Excel(context) async {
-    // try {
-    //   String? path = await FilePicker.platform.getDirectoryPath();
-    //   if (path != null) {
-    //     var excel = Excel.createExcel();
-    //     var sheet1 = excel['Sheet1'];
-    //     sheet1.appendRow(['Item_Name', 'Item_Count', 'Box_Name', 'Box_ID']);
-    //     var Item_Name = sheet1.cell(CellIndex.indexByString("A1"));
-    //     var Item_Count = sheet1.cell(CellIndex.indexByString("B1"));
-    //     var Box_Name = sheet1.cell(CellIndex.indexByString("C1"));
-    //     var Box_ID = sheet1.cell(CellIndex.indexByString("D1"));
-    //     Item_Name.cellStyle = CellStyle(
-    //         verticalAlign: VerticalAlign.Center,
-    //         horizontalAlign: HorizontalAlign.Center);
-    //     Item_Count.cellStyle = CellStyle(
-    //         verticalAlign: VerticalAlign.Center,
-    //         horizontalAlign: HorizontalAlign.Center);
-    //     Box_Name.cellStyle = CellStyle(
-    //         verticalAlign: VerticalAlign.Center,
-    //         horizontalAlign: HorizontalAlign.Center);
-    //     Box_ID.cellStyle = CellStyle(
-    //         verticalAlign: VerticalAlign.Center,
-    //         horizontalAlign: HorizontalAlign.Center);
+    try {
+      String? path = await FilePicker.platform.getDirectoryPath();
+      if (path != null) {
+        var excel = Excel.createExcel();
+        var sheet1 = excel['Sheet1'];
+        sheet1.appendRow(['Item_Name', 'Item_Count', 'Box_Name', 'Box_ID']);
+        var Item_Name = sheet1.cell(CellIndex.indexByString("A1"));
+        var Item_Count = sheet1.cell(CellIndex.indexByString("B1"));
+        var Box_Name = sheet1.cell(CellIndex.indexByString("C1"));
+        var Box_ID = sheet1.cell(CellIndex.indexByString("D1"));
+        Item_Name.cellStyle = CellStyle(
+            verticalAlign: VerticalAlign.Center,
+            horizontalAlign: HorizontalAlign.Center);
+        Item_Count.cellStyle = CellStyle(
+            verticalAlign: VerticalAlign.Center,
+            horizontalAlign: HorizontalAlign.Center);
+        Box_Name.cellStyle = CellStyle(
+            verticalAlign: VerticalAlign.Center,
+            horizontalAlign: HorizontalAlign.Center);
+        Box_ID.cellStyle = CellStyle(
+            verticalAlign: VerticalAlign.Center,
+            horizontalAlign: HorizontalAlign.Center);
 
-    //     List<FileSystemEntity> files = fileManager.Get_All_file_Name(context);
-    //     for (FileSystemEntity file in files) {
-    //       Map<String, dynamic> jsonData = jsonDecode(
-    //           fileManager.cleanJsonText((file as File).readAsStringSync()));
-    //       Map<String, dynamic> data = jsonData['Item_Data'];
-    //       data.forEach((key, value) {
-    //         sheet1.appendRow([
-    //           value['Item_Name'],
-    //           value['Item_Count'],
-    //           jsonData['Box_Name'],
-    //           key
-    //         ]);
-    //       });
-    //     }
-    //     var fileBytes = excel.save();
-    //     File('$path/${update.get_Now_Time()}.xlsx')
-    //         .writeAsBytesSync(fileBytes!);
-    //     SmartDialog.dismiss();
-    //     showToast('导出成功');
-    //   }
-    // } catch (e) {
-    //   SmartDialog.dismiss();
-    //   showToast('[错误10010]Excel导出过程出问题', notifyTypes: "failure");
-    // }
+        List<FileSystemEntity> files = fileManager.Get_All_file_Name(context);
+        for (FileSystemEntity file in files) {
+          Map<String, dynamic> jsonData = jsonDecode(
+              fileManager.cleanJsonText((file as File).readAsStringSync()));
+          Map<String, dynamic> data = jsonData['Item_Data'];
+          data.forEach((key, value) {
+            sheet1.appendRow([
+              value['Item_Name'],
+              value['Item_Count'],
+              jsonData['Box_Name'],
+              key
+            ]);
+          });
+        }
+        var fileBytes = excel.save();
+        File('$path/${update.get_Now_Time()}.xlsx')
+            .writeAsBytesSync(fileBytes!);
+        SmartDialog.dismiss();
+        showToast('导出成功');
+      }
+    } catch (e) {
+      SmartDialog.dismiss();
+      showToast('[错误10010]Excel导出过程出问题', notifyTypes: "failure");
+    }
   }
 
 // Excel导入到箱子

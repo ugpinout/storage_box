@@ -2,8 +2,8 @@
 
 import 'dart:convert';
 
-import 'package:demo/module/BoxManager.dart';
-import 'package:demo/module/FileManager.dart';
+import 'package:storage_box/module/BoxManager.dart';
+import 'package:storage_box/module/FileManager.dart';
 
 Box_Manager boxManager = Box_Manager();
 File_Manager fileManager = File_Manager();

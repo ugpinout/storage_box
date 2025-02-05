@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-// import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:demo/Socket.dart';
-import 'package:demo/module/ExcelManager.dart';
-import 'package:demo/module/SocketManager.dart';
+import 'package:storage_box/Socket.dart';
+import 'package:storage_box/module/ExcelManager.dart';
+import 'package:storage_box/module/SocketManager.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shirne_dialog/shirne_dialog.dart';
 
@@ -330,7 +330,11 @@ void Export_Box(context) {
       child: Column(
         children: [
           ElevatedButton(
-            onPressed: () => boxManager.Compress_All_Box(),
+            onPressed: () {
+              SmartDialog.dismiss();
+              boxManager.Compress_All_Box();
+
+            },
             child: const Text(
               '导出所有箱子[zip]',
               style: TextStyle(fontSize: 11),
@@ -401,43 +405,43 @@ void Import_Box_Excel(context) {
 
 // 导入zip文件
 void Import_Box_Zip(BuildContext context, app) async {
-  // FilePickerResult? result = await FilePicker.platform.pickFiles();
-  // if (result != null) {
-  //   if (result.files.single.path.toString().endsWith('zip')) {
-  //     final bytes = File(result.files.single.path as String).readAsBytesSync();
-  //     final archive = ZipDecoder().decodeBytes(bytes);
-  //     for (final file in archive) {
-  //       if (file.isFile == true && file.toString().endsWith('.json')) {
-  //         fileManager.Create_New_File(
-  //             app.prj_path, update.get_Now_Time(), utf8.decode(file.content));
-  //       }
-  //       update.Update_Box_Data(context);
-  //       app.notifyListeners();
-  //       SmartDialog.dismiss(force: true);
-  //       showToast('导入成功', notifyTypes: 'success');
-  //     }
-  //   } else {
-  //     SmartDialog.dismiss(force: true);
-  //     showToast('请选择zip文件', notifyTypes: "failure");
-  //   }
-  // }
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+  if (result != null) {
+    if (result.files.single.path.toString().endsWith('zip')) {
+      final bytes = File(result.files.single.path as String).readAsBytesSync();
+      final archive = ZipDecoder().decodeBytes(bytes);
+      for (final file in archive) {
+        if (file.isFile == true && file.toString().endsWith('.json')) {
+          fileManager.Create_New_File(
+              app.prj_path, update.get_Now_Time(), utf8.decode(file.content));
+        }
+        update.Update_Box_Data(context);
+        app.notifyListeners();
+        SmartDialog.dismiss(force: true);
+        showToast('导入成功', notifyTypes: 'success');
+      }
+    } else {
+      SmartDialog.dismiss(force: true);
+      showToast('请选择zip文件', notifyTypes: "failure");
+    }
+  }
 }
 
 // 导入json文件
 void import_box_json(BuildContext context, app) async {
-  // FilePickerResult? result = await FilePicker.platform.pickFiles();
-  // if (result != null) {
-  //   if (result.files.single.path.toString().endsWith('json')) {
-  //     final bytes = File(result.files.single.path as String).readAsBytesSync();
-  //     fileManager.Create_New_File(
-  //         app.prj_path, update.get_Now_Time(), utf8.decode(bytes));
-  //     update.Update_Box_Data(context);
-  //     app.notifyListeners();
-  //     SmartDialog.dismiss(force: true);
-  //     showToast('导入成功', notifyTypes: 'success');
-  //   } else {
-  //     SmartDialog.dismiss(force: true);
-  //     showToast('请选择json文件', notifyTypes: "failure");
-  //   }
-  // }
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+  if (result != null) {
+    if (result.files.single.path.toString().endsWith('json')) {
+      final bytes = File(result.files.single.path as String).readAsBytesSync();
+      fileManager.Create_New_File(
+          app.prj_path, update.get_Now_Time(), utf8.decode(bytes));
+      update.Update_Box_Data(context);
+      app.notifyListeners();
+      SmartDialog.dismiss(force: true);
+      showToast('导入成功', notifyTypes: 'success');
+    } else {
+      SmartDialog.dismiss(force: true);
+      showToast('请选择json文件', notifyTypes: "failure");
+    }
+  }
 }

@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "demo" "\0"
+            VALUE "CompanyName", "com.Flutter.Material" "\0"
+            VALUE "FileDescription", "storage_box" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "demo" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "demo.exe" "\0"
-            VALUE "ProductName", "demo" "\0"
+            VALUE "InternalName", "storage_box" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 com.Flutter.Material. All rights reserved." "\0"
+            VALUE "OriginalFilename", "storage_box.exe" "\0"
+            VALUE "ProductName", "storage_box" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

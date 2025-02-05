@@ -1,6 +1,6 @@
-// ignore_for_file: file_names, prefer_interpolation_to_compose_strings
+// ignore_for_file: file_names, prefer_interpolation_to_compose_strings, non_constant_identifier_names, camel_case_types
 
-// import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../module/app.dart';
@@ -8,46 +8,44 @@ import '../module/app.dart';
 import 'toast.dart';
 import 'dart:io';
 
-// import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 App app = App();
 
 class File_Manager {
-  // ignore: non_constant_identifier_names
   Future<bool> Is_A_Dir(dirs, context) async {
-    return true;
-    // String path;
+    String path;
 
-    // if (Platform.isAndroid) {
-    //   Provider.of<App>(context, listen: false).whyDevices = 'A';
-    //   final dir = await getExternalStorageDirectory();
-    //   if (dir == null) {
-    //     showToast('[错误10000]无法获取Android外部存储目录', notifyTypes: "failure");
-    //     return false;
-    //   }
-    //   path = '${dir.path}/' + dirs;
-    // } else if (Platform.isWindows) {
-    //   Provider.of<App>(context, listen: false).whyDevices = 'W';
-    //   Uri uri = Platform.script;
-    //   String scriptDir = uri.resolve('.').toFilePath();
-    //   path = '${Directory(scriptDir).path}/' + dirs;
-    // } else {
-    //   throw UnsupportedError('Platform not supported');
-    // }
-    // app.prj_path = path;
-    // if (await Directory(path).exists()) {
-    //   return true;
-    // } else {
-    //   showToast('[警告10001]目录不存在，尝试创建目录', notifyTypes: 'warning');
-    //   try {
-    //     await Directory(path).create(recursive: true);
-    //     // showToast('创建目录成功', backgroundColors: Colors.green);
-    //     return true;
-    //   } catch (e) {
-    //     showToast('[错误10001]创建失败: $e', notifyTypes: "failure");
-    //     return false;
-    //   }
-    // }
+    if (Platform.isAndroid) {
+      Provider.of<App>(context, listen: false).whyDevices = 'A';
+      final dir = await getExternalStorageDirectory();
+      if (dir == null) {
+        showToast('[错误10000]无法获取Android外部存储目录', notifyTypes: "failure");
+        return false;
+      }
+      path = '${dir.path}/' + dirs;
+    } else if (Platform.isWindows) {
+      Provider.of<App>(context, listen: false).whyDevices = 'W';
+      Uri uri = Platform.script;
+      String scriptDir = uri.resolve('.').toFilePath();
+      path = '${Directory(scriptDir).path}/' + dirs;
+    } else {
+      throw UnsupportedError('Platform not supported');
+    }
+    app.prj_path = path;
+    if (await Directory(path).exists()) {
+      return true;
+    } else {
+      showToast('[警告10001]目录不存在，尝试创建目录', notifyTypes: 'warning');
+      try {
+        await Directory(path).create(recursive: true);
+        // showToast('创建目录成功', backgroundColors: Colors.green);
+        return true;
+      } catch (e) {
+        showToast('[错误10001]创建失败: $e', notifyTypes: "failure");
+        return false;
+      }
+    }
   }
 
 //获取指定目录下的所有文件名
@@ -122,14 +120,14 @@ class File_Manager {
 
 // 复制文件到指定目录
   void Copy_File_To_Dir(id) async {
-    // try {
-    //   String? path = await FilePicker.platform.getDirectoryPath();
-    //   if (path != null) {
-    //     File('${app.prj_path}/$id.json').copySync('$path/$id.json');
-    //     showToast('导出成功', notifyTypes: "success");
-    //   }
-    // } catch (e) {
-    //   showToast('[错误10006]复制失败', notifyTypes: "failure");
-    // }
+    try {
+      String? path = await FilePicker.platform.getDirectoryPath();
+      if (path != null) {
+        File('${app.prj_path}/$id.json').copySync('$path/$id.json');
+        showToast('导出成功', notifyTypes: "success");
+      }
+    } catch (e) {
+      showToast('[错误10006]复制失败', notifyTypes: "failure");
+    }
   }
 }

@@ -1,11 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, no_logic_in_create_state, no_leading_underscores_for_local_identifiers, prefer_interpolation_to_compose_strings, unrelated_type_equality_checks, file_names
 
 import 'package:flutter/material.dart';
-import 'package:demo/module/BoxManager.dart';
-import 'package:demo/module/ItemManager.dart';
-import 'package:demo/module/Update.dart';
-import 'package:demo/module/app.dart';
-import 'package:demo/pages/Box_Page_Item_list.dart';
+import 'package:storage_box/module/BoxManager.dart';
+import 'package:storage_box/module/ItemManager.dart';
+import 'package:storage_box/module/Update.dart';
+import 'package:storage_box/module/app.dart';
+import 'package:storage_box/pages/Box_Page_Item_list.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 

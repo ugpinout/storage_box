@@ -1,11 +1,11 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:demo/Box.dart';
-import 'package:demo/main.dart';
-import 'package:demo/module/SocketManager.dart';
-import 'package:demo/module/toast.dart';
+import 'package:storage_box/Box.dart';
+import 'package:storage_box/main.dart';
+import 'package:storage_box/module/SocketManager.dart';
+import 'package:storage_box/module/toast.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:text_mask/text_mask.dart';
 
@@ -151,7 +151,7 @@ void connect_clinet(app, context) {
             child: ElevatedButton(
               //端口连接按钮按下事件
               onPressed: () async {
-                await socketmanager.getLocalIPAddress().then((local_ip) {
+                await socketmanager.getLocalIPAddress().then((localIp) {
                   if (IPEditor.text.isEmpty || PortEditor.text.isEmpty) {
                     showToast('哈↑哈↓', notifyTypes: 'alert');
                   } else {
@@ -164,7 +164,7 @@ void connect_clinet(app, context) {
                         app.Socket_Var['Connect_type'] =
                             '已连接 - [${IPEditor.text}:${PortEditor.text}]';
                         app.Socket_Var['Connect_type_Color'] = Colors.green;
-                        app.Socket_Var['Remote_IP'] = '本地地址：$local_ip';
+                        app.Socket_Var['Remote_IP'] = '本地地址：$localIp';
                         app.Socket_Var['Connect_addr_Color'] = Colors.green;
                         app.notifyListeners();
                       }
@@ -322,7 +322,7 @@ Future<void> send_file(data, app) async {
       if (item[2] == true) {
         await socketmanager.send_data(item[1].toString()).then((val) {});
         app.addFile(item[0]);
-        await Future.delayed(const Duration(milliseconds: 150));
+        await Future.delayed(const Duration(milliseconds: 300));
       }
     }
   }

@@ -3,10 +3,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:demo/Box.dart';
-import 'package:demo/module/FileManager.dart';
-import 'package:demo/module/app.dart';
-import 'package:demo/module/toast.dart';
+import 'package:storage_box/Box.dart';
+import 'package:storage_box/module/FileManager.dart';
+import 'package:storage_box/module/app.dart';
+import 'package:storage_box/module/toast.dart';
 import 'package:provider/provider.dart';
 
 File_Manager fileManager = File_Manager();

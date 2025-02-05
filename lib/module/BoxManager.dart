@@ -1,15 +1,14 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, non_constant_identifier_names, camel_case_types
 
 import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
-// import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:demo/Box.dart';
-import 'package:demo/module/toast.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:storage_box/Box.dart';
+import 'package:storage_box/module/toast.dart';
 import 'package:permission_handler/permission_handler.dart';
-// import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'FileManager.dart';
 
@@ -88,8 +87,7 @@ class Box_Manager {
 
 // 分享一个箱子
   share_One_Box(String id) {
-    return true;
-    // Share.shareXFiles([XFile('${app.prj_path}/$id.json')], text: "分享箱子id:$id");
+    Share.shareXFiles([XFile('${app.prj_path}/$id.json')], text: "分享箱子id:$id");
   }
 
 // 删除一个箱子
@@ -97,43 +95,43 @@ class Box_Manager {
     fileManager.Del_One_File(app.prj_path, id);
   }
 
-  //压缩路径上的所有箱子文件
   Future<void> Compress_All_Box() async {
-    // try {
-    //   String? path = await FilePicker.platform.getDirectoryPath();
-    //   if (path != null) {
-    //     if (await Permission.storage.isGranted == false) {
-    //       // 检查 Android 特有权限
-    //       var status = await Permission.manageExternalStorage.request();
-    //       if (status.isGranted) {
-    //         await zipJsonFiles(
-    //             app.prj_path, "$path/${update.get_Now_Time()}.zip");
-    //       } else {
-    //         showToast('权限已拒绝');
-    //         openAppSettings();
-    //       }
-    //     } else {
-    //       await zipJsonFiles(
-    //           app.prj_path, "$path/${update.get_Now_Time()}.zip");
-    //       // var encoder = ZipFileEncoder();
-    //       // await encoder.zipDirectoryAsync(Directory(app.prj_path),
-    //       //     filename: "$path/${update.get_Now_Time()}.zip");
-    //     }
-    //   }
-    // } catch (e) {
-    //   showToast('[错误10012_3]压缩失败', notifyTypes: "failure");
-    // }
+    try {
+      // 使用 FilePicker 获取用户选择的目录吧
+      String? path = await FilePicker.platform.getDirectoryPath();
+      if (path != null) {
+        // 检查是否已经授予存储权限
+        if (await Permission.storage.isGranted == false) {
+          // 请求 MANAGE_EXTERNAL_STORAGE 权限
+          var status = await Permission.manageExternalStorage.request();
+          if (status.isGranted) {
+            // 如果权限被授予，执行压缩
+            await zipJsonFiles(
+                app.prj_path, "$path/${update.get_Now_Time()}.zip");
+          } else {
+            showToast('权限已拒绝，请在设置中启用权限');
+            openAppSettings(); // 引导用户打开设置
+          }
+        } else {
+          // 如果权限已授予，直接进行压缩
+          await zipJsonFiles(
+              app.prj_path, "$path/${update.get_Now_Time()}.zip");
+        }
+      }
+    } catch (e) {
+      showToast('[错误10012_3]压缩失败', notifyTypes: "failure");
+    }
   }
 
   Future<void> zipJsonFiles(String directoryPath, String zipFilePath) async {
     // 获取目标目录
     Directory dir = Directory(directoryPath);
     if (!dir.existsSync()) {
-      showToast('[错误10012_1]压缩失败', notifyTypes: "failure");
+      showToast('[错误10012_1]源目录不存在', notifyTypes: "failure");
       return;
     }
 
-    // 创建一个新的归档
+    // 创建一个新的归档对象
     Archive archive = Archive();
 
     // 遍历目录及其子目录
@@ -148,13 +146,17 @@ class Box_Manager {
         archive.addFile(ArchiveFile(fileName, bytes.length, bytes));
       }
     }
-
     try {
-      // 使用 ZipEncoder 来编码归档
+      // 使用 ZipEncoder 来压缩归档
       List<int>? zipData = ZipEncoder().encode(archive);
-      // 写入文件
-      await File(zipFilePath).writeAsBytes(zipData!);
-      showToast('导出成功');
+      if (zipData != null) {
+        // 将压缩数据写入文件
+        await File(zipFilePath)
+            .writeAsBytes(zipData, mode: FileMode.writeOnlyAppend, flush: true);
+        showToast('导出成功');
+      } else {
+        showToast('[错误10012_2]压缩失败，无法生成zip数据', notifyTypes: "failure");
+      }
     } catch (e) {
       showToast('[错误10012_2]压缩失败', notifyTypes: "failure");
     }

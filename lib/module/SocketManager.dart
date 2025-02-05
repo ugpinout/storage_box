@@ -1,13 +1,13 @@
-// ignore_for_file: file_names, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: file_names, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, non_constant_identifier_names, camel_case_types
 
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:demo/Box.dart';
-import 'package:demo/Socket.dart';
-import 'package:demo/module/FileManager.dart';
-import 'package:demo/module/toast.dart';
+import 'package:storage_box/Box.dart';
+import 'package:storage_box/Socket.dart';
+import 'package:storage_box/module/FileManager.dart';
+import 'package:storage_box/module/toast.dart';
 
 class Socket_Manager {
   String localIP = '0.0.0.0';
@@ -73,7 +73,7 @@ class Socket_Manager {
     try {
       if (currentServer != null) {
         await currentServer!.close(); // 关闭服务器
-        showToast('以断开连接');
+        showToast('已断开连接');
       }
     } catch (e) {
       showToast('[错误10009]结束已建立的房间失败', notifyTypes: "failure");
@@ -114,7 +114,9 @@ class Socket_Manager {
   Future<bool> Connect_Socket(dynamic ip, int Port, context) async {
     try {
       // 连接到服务器
+      print("ip $ip,Port $Port");
       currentclinet = await Socket.connect(ip, Port);
+      print(currentclinet);
       showToast('已连接到服务器');
       connect_clinet_handle(currentclinet, context);
       // 监听服务器的响应

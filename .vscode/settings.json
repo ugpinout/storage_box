@@ -1,0 +1,10 @@
+{
+    "cSpell.words": [
+        "allprojects",
+        "buildscript",
+        "subprojects"
+        
+    ],
+    "editor.parameterHints.enabled": false,
+"editor.inlayHints.enabled": "off"
+}
