@@ -27,7 +27,7 @@ class App extends ChangeNotifier {
   // ignore: non_constant_identifier_names
   String prj_path = 'boxs'; //项目数据目录
   // ignore: non_constant_identifier_names
-  final String prj_version = '1.0.0'; //项目版本
+  final String prj_version = '1.0.3'; //项目版本
   // 判断是哪个设备
   String _whyDevices = 'W';
 
