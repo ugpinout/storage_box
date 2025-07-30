@@ -6,7 +6,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import '../module/FileManager.dart';
 import '../Box.dart';
-import 'package:storage_box/main.dart' hide app, update;
 
 File_Manager fileManager = File_Manager();
 

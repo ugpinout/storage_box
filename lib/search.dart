@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:storage_box/module/app.dart';
 import 'package:storage_box/module/toast.dart';
 import 'package:storage_box/pages/Search_Page_Item_List.dart';
@@ -35,62 +34,67 @@ class _Search_Page extends State<Search_Page> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<App>(builder: (context, app, child) {
-      return Scaffold(
-        appBar: AppBar(
+    return Consumer<App>(
+      builder: (context, app, child) {
+        return Scaffold(
+          appBar: AppBar(
             leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             backgroundColor: Colors.yellow,
-            title: const Center(child: Text("搜索零件"))),
-        body: Column(
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Row(children: [
-                Expanded(
-                  child: TextField(
-                    controller: nameController,
-                    decoration: const InputDecoration(hintText: '输入箱子名称'),
-                    textAlign: TextAlign.center,
-                  ),
+            title: const Center(child: Text("搜索零件")),
+          ),
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 10.0,
                 ),
-                InkWell(
-                  child: const Icon(
-                    Icons.search,
-                    size: 30,
-                  ),
-                  onTap: () {
-                    if (nameController.text.isEmpty) {
-                      showToast('哈↓哈↑', notifyTypes: 'warning');
-                    } else {
-                      Search_Item(context, nameController.text, app);
-                    }
-                  },
-                )
-              ]),
-            ),
-            Expanded(
-              // 确保 ListView 能够正确占用剩余空间
-              child: ListView.builder(
-                padding: const EdgeInsets.all(5),
-                itemCount: app.Search_data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return CustomListItem(
-                    icon: Icons.category_outlined,
-                    Item_name: app.Search_data[index][0],
-                    Box_Name: app.Search_data[index][1],
-                    Box_ID: app.Search_data[index][2],
-                  );
-                },
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: nameController,
+                        decoration: const InputDecoration(hintText: '输入箱子名称'),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    InkWell(
+                      child: const Icon(Icons.search, size: 30),
+                      onTap: () {
+                        if (nameController.text.isEmpty) {
+                          showToast('哈↓哈↑', notifyTypes: 'warning');
+                        } else {
+                          Search_Item(context, nameController.text, app);
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      );
-    });
+              Expanded(
+                // 确保 ListView 能够正确占用剩余空间
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(5),
+                  itemCount: app.Search_data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CustomListItem(
+                      icon: Icons.category_outlined,
+                      Item_name: app.Search_data[index][0],
+                      Box_Name: app.Search_data[index][1],
+                      Box_ID: app.Search_data[index][2],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
