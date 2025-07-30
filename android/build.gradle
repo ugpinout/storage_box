@@ -1,3 +1,22 @@
+// 构建脚本配置（必须包含AGP和Kotlin插件依赖）
+buildscript {
+    // 定义Kotlin版本（根据项目需求调整，建议1.9.0及以上）
+    ext.kotlin_version = '1.9.0'
+
+    repositories {
+        google()       // 谷歌仓库（必须，用于下载AGP）
+        mavenCentral() // 中央仓库
+    }
+
+    dependencies {
+        // 升级Android Gradle Plugin到8.3.0（解决版本过时警告）
+        classpath 'com.android.tools.build:gradle:8.3.0'
+        // Kotlin Gradle插件（如果项目使用Kotlin则必须）
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+// 所有子项目的仓库配置
 allprojects {
     repositories {
         google()
@@ -5,6 +24,7 @@ allprojects {
     }
 }
 
+// 你的原有配置（保留）
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
@@ -13,6 +33,32 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// 配置Android全局属性（指定NDK版本，解决CXX1101错误）
+ext {
+    // 指定兼容的NDK版本（必须与你安装的版本一致，如25.2.9519653）
+    ndkVersion = '25.2.9519653'
+}
+
+// 清理任务（保留）
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+//allprojects {
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//}
+//
+//rootProject.buildDir = "../build"
+//subprojects {
+//    project.buildDir = "${rootProject.buildDir}/${project.name}"
+//}
+//subprojects {
+//    project.evaluationDependsOn(":app")
+//}
+//
+//tasks.register("clean", Delete) {
+//    delete rootProject.buildDir
+//}

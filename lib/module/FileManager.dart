@@ -1,8 +1,9 @@
-// ignore_for_file: file_names, prefer_interpolation_to_compose_strings, non_constant_identifier_names, camel_case_types
+// ignore_for_file: file_names, prefer_interpolation_to_compose_strings, non_constant_identifier_names, camel_case_types, unused_element, strict_top_level_inference
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:storage_box/module/SettingManager.dart';
 import '../module/app.dart';
 
 import 'toast.dart';
@@ -11,6 +12,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 App app = App();
+Setting_Manager setting_manager = Setting_Manager();
 
 class File_Manager {
   Future<bool> Is_A_Dir(dirs, context) async {
@@ -37,9 +39,11 @@ class File_Manager {
       return true;
     } else {
       showToast('[警告10001]目录不存在，尝试创建目录', notifyTypes: 'warning');
+
       try {
         await Directory(path).create(recursive: true);
-        // showToast('创建目录成功', backgroundColors: Colors.green);
+        //assets -config 目录里的conf 文件复制到box目录下
+
         return true;
       } catch (e) {
         showToast('[错误10001]创建失败: $e', notifyTypes: "failure");
@@ -49,7 +53,7 @@ class File_Manager {
   }
 
 //获取指定目录下的所有文件名
-  Get_All_file_Name(BuildContext context) {
+  List<FileSystemEntity> Get_All_file_Name(BuildContext context) {
     final directory = Directory(app.prj_path);
     //只获取json文件
     final List<FileSystemEntity> entities = directory
@@ -61,7 +65,7 @@ class File_Manager {
   }
 
 //获取指定目录下的箱子文件数量
-  Get_File_Count(BuildContext context) {
+  int Get_File_Count(BuildContext context) {
     int num = 0;
     final directory = Directory(app.prj_path);
     final List<FileSystemEntity> entities = directory.listSync();
@@ -77,7 +81,7 @@ class File_Manager {
   }
 
 // 创建一个新文件
-  Create_New_File(File_Path, File_Name, txt) {
+  bool Create_New_File(File_Path, File_Name, txt) {
     try {
       File('$File_Path/$File_Name.json').writeAsStringSync(txt);
       return true;
@@ -87,28 +91,29 @@ class File_Manager {
   }
 
 // 获取一个文件的内容
-  Get_One_File_Text(file_path, id) {
+  String Get_One_File_Text(file_path, id) {
     try {
       String Json_text = File('$file_path/$id.json').readAsStringSync();
       return Json_text;
     } catch (e) {
       showToast('[错误10003]打开失败', notifyTypes: "failure");
-      return null;
+      return "";
     }
   }
 
 // 写入一个文件的内容
-  Set_One_File_Text(file_path, id, txt) {
+  bool Set_One_File_Text(file_path, id, txt) {
     try {
       File('$file_path/$id.json').writeAsStringSync(txt);
       return true;
     } catch (e) {
       showToast('[错误10004]写入失败', notifyTypes: "failure");
+      return false;
     }
   }
 
 // 删除一个文件
-  Del_One_File(file_path, id) {
+  bool Del_One_File(file_path, id) {
     try {
       File('$file_path/$id.json').deleteSync();
       return true;

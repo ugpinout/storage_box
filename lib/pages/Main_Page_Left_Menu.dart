@@ -7,6 +7,7 @@ import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:storage_box/Socket.dart';
+import 'package:storage_box/ThanksPage.dart';
 import 'package:storage_box/module/ExcelManager.dart';
 import 'package:storage_box/module/SocketManager.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -16,10 +17,11 @@ import '../module/toast.dart';
 import '../module/Update.dart';
 import '../module/FileManager.dart';
 import '../module/BoxManager.dart';
+import '../Setting.dart';
 
 Update update = Update();
 File_Manager fileManager = File_Manager();
-Box_Manager boxManager = Box_Manager();
+// Box_Manager boxManager = Box_Manager();
 Excelmanager excelmanager = Excelmanager();
 
 class left_menu extends StatelessWidget {
@@ -85,14 +87,15 @@ class left_menu extends StatelessWidget {
             ListTile(
               tileColor: Colors.white,
               dense: true,
-              leading: const Icon(Icons.cloud),
-              title: const Text('配置FTP服务器'),
+              leading: const Icon(Icons.settings_applications_outlined),
+              title: const Text('设置'),
               subtitle:
-                  const Text('配置服务器用于备份数据', style: TextStyle(fontSize: 10.0)),
+                  const Text('可以修改一些通用设置', style: TextStyle(fontSize: 10.0)),
               trailing: const Icon(Icons.arrow_right),
               // 配置FTP服务器按钮按下的时候触发的事件
               onTap: () => {
-                showToast('本版本没开发此功能', notifyTypes: "warning"),
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const Setting_Page())),
                 sliderKey.currentState!.toggle(),
               },
             ),
@@ -272,13 +275,29 @@ class left_menu extends StatelessWidget {
                             ),
                             child: const SingleChildScrollView(
                               child: Column(children: [
-                                Text(
-                                    '介绍：应用版本1.0.1 Beta\n收纳盒App是整理和管理物品的好帮手。无论是家庭用品、办公文具、个人物品还是电子零件，这款App帮助您高效地记录和追踪每一个物品的数量。用户可以轻松创建多个收纳盒，添加物品，并通过直观的界面查看详细信息。\n功能亮点：\n简易管理：快速添加和编辑物品，实时更新数量。\n分类整理：按类别和标签组织物品，轻松找到所需。\n分享功能：与家人或团队共享箱子信息。\n结语：\n无论您是想要保持家庭井井有条，还是希望在办公环境中提高效率，收纳盒App都能满足您的需求！\n联系方式：\nQQ：2280711844\n Email:2280711844@qq.com\n[感谢认真看完作者吹牛的短文]'),
+                                Text('介绍：\n收纳盒App是整理和管理物品的好帮手。'
+                                    '无论是家庭用品、办公文具、个人物品还是电子零件，'
+                                    '这款App帮助您高效地记录和追踪每一个物品的数量。'
+                                    '用户可以轻松创建多个收纳盒，添加物品，并通过直观的界面查看详细信息。'
+                                    '\n功能亮点：\n简易管理：快速添加和编辑物品，实时更新数量。\n分类整理：按类别和标签组织物品，轻松找到所需。\n分享功能：与家人或团队共享箱子信息。\n结语：\n无论您是想要保持家庭井井有条，还是希望在办公环境中提高效率，收纳盒App都能满足您的需求！\n联系方式：\nQQ：2280711844\n Email:2280711844@qq.com\n[感谢认真看完作者吹牛的短文]'),
                               ]),
                             )),
                       );
                     })
               },
+            ),
+            //鸣谢
+            ListTile(
+              tileColor: Colors.white,
+              dense: true,
+              trailing: const Icon(Icons.arrow_right),
+              leading: const Icon(Icons.favorite),
+              subtitle:
+                  const Text('开发软件所用的插件', style: TextStyle(fontSize: 10.0)),
+              title: const Text('鸣谢'),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ThanksPage(),
+              )),
             ),
           ],
         )),
@@ -333,7 +352,6 @@ void Export_Box(context) {
             onPressed: () {
               SmartDialog.dismiss();
               boxManager.Compress_All_Box();
-
             },
             child: const Text(
               '导出所有箱子[zip]',

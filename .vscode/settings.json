@@ -6,5 +6,18 @@
         
     ],
     "editor.parameterHints.enabled": false,
-"editor.inlayHints.enabled": "off"
+"editor.inlayHints.enabled": "off",
+"cmake.sourceDirectory": "D:/Decktop/Independent_Project/storage_box/windows",
+"files.exclude": {
+    "**/.DS_Store": false,
+    "**/.git": false,
+    "**/.hg": false,
+    "**/.svn": false,
+    "**/Thumbs.db": false
+},
+"search.exclude": {
+    "**/*.code-search": false,
+    "**/bower_components": false,
+    "**/node_modules": false
+}
 }

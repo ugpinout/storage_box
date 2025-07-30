@@ -7,7 +7,6 @@ import 'package:shirne_dialog/shirne_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storage_box/module/Update.dart';
-// import 'package:storage_box/module/Update.dart';
 
 import 'module/app.dart';
 import 'pages/main_page_Top_Bar.dart';
@@ -46,14 +45,15 @@ class _MainPageState extends State<MainPage> {
         navigatorKey: MyDialog.navigatorKey,
         debugShowCheckedModeBanner: false,
         home: const Top_Bar(),
-        theme: ThemeData(primarySwatch: Colors.yellow));
+        theme: ThemeData(primarySwatch: Colors.yellow, fontFamily: 'hei'));
   }
 }
 
 Future<void> Main_Inint(BuildContext context) async {
   bool type = await fileManager.Is_A_Dir('boxs', context);
+  bool type1 = await setting_manager.Is_Config_File_Exist();
 
-  if (!type) {
+  if (!type && !type1) {
     MyDialog.alert('致命错误\n[错误10001]目录创建失败，请退出软件', buttonText: '好咧',
         onConfirm: () {
       SystemNavigator.pop();

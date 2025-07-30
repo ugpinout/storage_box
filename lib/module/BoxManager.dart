@@ -1,5 +1,4 @@
-// ignore_for_file: file_names, non_constant_identifier_names, camel_case_types
-
+// ignore_for_file: file_names, non_constant_identifier_names, camel_case_types, strict_top_level_inference
 import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
@@ -9,14 +8,13 @@ import 'package:storage_box/Box.dart';
 import 'package:storage_box/module/toast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
-
+import 'package:storage_box/pages/Setting_Page_Item_List.dart';
+import 'package:storage_box/main.dart' hide app, update;
 import 'FileManager.dart';
-
-File_Manager fileManager = File_Manager();
 
 class Box_Manager {
   //创建一个箱子
-  Create_New_Box(Box_Name) {
+  bool Create_New_Box(Box_Name) {
     if (fileManager.Create_New_File(
         app.prj_path,
         DateTime.now().millisecondsSinceEpoch.toString(),
@@ -28,7 +26,7 @@ class Box_Manager {
   }
 
 //获取指定目录下的所有箱子文件里的箱子名字
-  Get_All_Box_Name(BuildContext context, File_Path) {
+  List<String> Get_All_Box_Name(BuildContext context, File_Path) {
     List<String> Box_Name = [];
     for (int i = 0; i < File_Path.length; i++) {
       if (File_Path[i].toString().endsWith('json\'') == true) {
@@ -41,35 +39,358 @@ class Box_Manager {
     return Box_Name;
   }
 
-//文件名字和箱子名字加在一起
-  Create_Box_Data_Map(file_Path, Box_Name) {
+  Map<String, String> Create_Box_Data_Map(file_Path, List<String> Box_Name) {
+    // 1. 构建原始 Map（key: Box_Name，value: 文件名）
     Map<String, String> Box_Data = {};
     for (int i = 0; i < Box_Name.length; i++) {
       String file_name =
           file_Path[i].uri.pathSegments.last.toString().split('.')[0];
       Box_Data[Box_Name[i]] = file_name;
     }
-    return Box_Data;
+
+    String sort_type = Get_Box_Sort_Type();
+
+    switch (sort_type) {
+      case "系统默认排序":
+        print("箱子系统默认排序");
+        return Box_Data;
+
+      case "数字开头降序":
+        return Map.fromEntries(Box_Data.entries.toList()
+          ..sort((a, b) {
+            bool aIsDigit =
+                a.key.isNotEmpty && a.key[0].contains(RegExp(r'[0-9]'));
+            bool bIsDigit =
+                b.key.isNotEmpty && b.key[0].contains(RegExp(r'[0-9]'));
+            bool aIsLetter = a.key.isNotEmpty &&
+                a.key[0].toLowerCase().contains(RegExp(r'[a-z]'));
+            bool bIsLetter = b.key.isNotEmpty &&
+                b.key[0].toLowerCase().contains(RegExp(r'[a-z]'));
+
+            // 数字优先（降序）
+            if (aIsDigit && !bIsDigit) return -1;
+            if (!aIsDigit && bIsDigit) return 1;
+            if (aIsDigit && bIsDigit) {
+              int aNum =
+                  int.tryParse(a.key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+              int bNum =
+                  int.tryParse(b.key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+              return bNum.compareTo(aNum); // 改为降序
+            }
+
+            // 然后是字母（降序）
+            if (aIsLetter && !bIsLetter) return -1;
+            if (!aIsLetter && bIsLetter) return 1;
+            if (aIsLetter && bIsLetter) {
+              return b.key.toLowerCase().compareTo(a.key.toLowerCase());
+            }
+
+            // 最后是中文（降序）
+            return b.key.compareTo(a.key);
+          }));
+
+      case "首字母降序":
+        return Map.fromEntries(Box_Data.entries.toList()
+          ..sort((a, b) {
+            bool aIsDigit =
+                a.key.isNotEmpty && a.key[0].contains(RegExp(r'[0-9]'));
+            bool bIsDigit =
+                b.key.isNotEmpty && b.key[0].contains(RegExp(r'[0-9]'));
+            bool aIsLetter = a.key.isNotEmpty &&
+                a.key[0].toLowerCase().contains(RegExp(r'[a-z]'));
+            bool bIsLetter = b.key.isNotEmpty &&
+                b.key[0].toLowerCase().contains(RegExp(r'[a-z]'));
+
+            // 数字最后
+            if (aIsDigit && !bIsDigit) return 1;
+            if (!aIsDigit && bIsDigit) return -1;
+            if (aIsDigit && bIsDigit) {
+              return b.key.compareTo(a.key);
+            }
+
+            // 字母优先（降序）
+            if (aIsLetter && !bIsLetter) return -1;
+            if (!aIsLetter && bIsLetter) return 1;
+            if (aIsLetter && bIsLetter) {
+              return b.key.toLowerCase().compareTo(a.key.toLowerCase());
+            }
+
+            // 然后是中文（降序）
+            return b.key.compareTo(a.key);
+          }));
+
+      case "首字母升序":
+        return Map.fromEntries(Box_Data.entries.toList()
+          ..sort((a, b) {
+            bool aIsDigit =
+                a.key.isNotEmpty && a.key[0].contains(RegExp(r'[0-9]'));
+            bool bIsDigit =
+                b.key.isNotEmpty && b.key[0].contains(RegExp(r'[0-9]'));
+            bool aIsLetter = a.key.isNotEmpty &&
+                a.key[0].toLowerCase().contains(RegExp(r'[a-z]'));
+            bool bIsLetter = b.key.isNotEmpty &&
+                b.key[0].toLowerCase().contains(RegExp(r'[a-z]'));
+
+            // 数字最后
+            if (aIsDigit && !bIsDigit) return 1;
+            if (!aIsDigit && bIsDigit) return -1;
+            if (aIsDigit && bIsDigit) {
+              return a.key.compareTo(b.key);
+            }
+
+            // 字母优先（升序）
+            if (aIsLetter && !bIsLetter) return -1;
+            if (!aIsLetter && bIsLetter) return 1;
+            if (aIsLetter && bIsLetter) {
+              return a.key.toLowerCase().compareTo(b.key.toLowerCase());
+            }
+
+            // 然后是中文（升序）
+            return a.key.compareTo(b.key);
+          }));
+
+      case "数字开头升序":
+        return Map.fromEntries(Box_Data.entries.toList()
+          ..sort((a, b) {
+            bool aIsDigit =
+                a.key.isNotEmpty && a.key[0].contains(RegExp(r'[0-9]'));
+            bool bIsDigit =
+                b.key.isNotEmpty && b.key[0].contains(RegExp(r'[0-9]'));
+            bool aIsLetter = a.key.isNotEmpty &&
+                a.key[0].toLowerCase().contains(RegExp(r'[a-z]'));
+            bool bIsLetter = b.key.isNotEmpty &&
+                b.key[0].toLowerCase().contains(RegExp(r'[a-z]'));
+
+            // 数字优先（升序）
+            if (aIsDigit && !bIsDigit) return -1;
+            if (!aIsDigit && bIsDigit) return 1;
+            if (aIsDigit && bIsDigit) {
+              int aNum =
+                  int.tryParse(a.key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+              int bNum =
+                  int.tryParse(b.key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+              return aNum.compareTo(bNum);
+            }
+
+            // 然后是字母（升序）
+            if (aIsLetter && !bIsLetter) return -1;
+            if (!aIsLetter && bIsLetter) return 1;
+            if (aIsLetter && bIsLetter) {
+              return a.key.toLowerCase().compareTo(b.key.toLowerCase());
+            }
+
+            // 最后是中文（升序）
+            return a.key.compareTo(b.key);
+          }));
+
+      default:
+        print("箱子未知排序类型");
+        return Box_Data;
+    }
   }
 
   //获取一个箱子的名称[用于子页面AppBar上面显示]
-  Get_One_Box_Name(id) {
+  dynamic Get_One_Box_Name(id) {
     String Json_text = fileManager.Get_One_File_Text(app.prj_path, id);
     Map<String, dynamic> jsonData =
         jsonDecode(fileManager.cleanJsonText(Json_text));
     return jsonData['Box_Name'];
   }
 
-//获取一个箱子里面的零件数据
-  Get_One_Box_Data(id) {
+  Map<String, dynamic> Get_One_Box_Data(id) {
     String Json_text = fileManager.Get_One_File_Text(app.prj_path, id);
     Map<String, dynamic> jsonData =
         jsonDecode(fileManager.cleanJsonText(Json_text));
-    return jsonData;
+
+    // 获取Item_Data并转换为可排序的MapEntry列表
+    Map<String, dynamic> itemData = jsonData['Item_Data'];
+    List<MapEntry<String, dynamic>> entries = itemData.entries.toList();
+
+    // 根据当前排序类型进行排序
+    switch (Get_Item_Sort_Type()) {
+      case "系统默认排序":
+        print("零件系统默认排序");
+        return jsonData; // 保持原始顺序
+
+      case "首字母升序":
+        print("零件首字母升序");
+        entries.sort((a, b) {
+          String aName = a.value['Item_Name'] ?? '';
+          String bName = b.value['Item_Name'] ?? '';
+          bool aIsDigit =
+              aName.isNotEmpty && aName[0].contains(RegExp(r'[0-9]'));
+          bool bIsDigit =
+              bName.isNotEmpty && bName[0].contains(RegExp(r'[0-9]'));
+          bool aIsLetter = aName.isNotEmpty &&
+              aName[0].toLowerCase().contains(RegExp(r'[a-z]'));
+          bool bIsLetter = bName.isNotEmpty &&
+              bName[0].toLowerCase().contains(RegExp(r'[a-z]'));
+
+          // 数字最后
+          if (aIsDigit && !bIsDigit) return 1;
+          if (!aIsDigit && bIsDigit) return -1;
+          if (aIsDigit && bIsDigit) return aName.compareTo(bName);
+
+          // 字母优先（升序）
+          if (aIsLetter && !bIsLetter) return -1;
+          if (!aIsLetter && bIsLetter) return 1;
+          if (aIsLetter && bIsLetter)
+            return aName.toLowerCase().compareTo(bName.toLowerCase());
+
+          // 然后是中文（升序）
+          return aName.compareTo(bName);
+        });
+        break;
+
+      case "首字母降序":
+        print("零件首字母降序");
+        entries.sort((a, b) {
+          String aName = a.value['Item_Name'] ?? '';
+          String bName = b.value['Item_Name'] ?? '';
+          bool aIsDigit =
+              aName.isNotEmpty && aName[0].contains(RegExp(r'[0-9]'));
+          bool bIsDigit =
+              bName.isNotEmpty && bName[0].contains(RegExp(r'[0-9]'));
+          bool aIsLetter = aName.isNotEmpty &&
+              aName[0].toLowerCase().contains(RegExp(r'[a-z]'));
+          bool bIsLetter = bName.isNotEmpty &&
+              bName[0].toLowerCase().contains(RegExp(r'[a-z]'));
+
+          // 数字最后
+          if (aIsDigit && !bIsDigit) return 1;
+          if (!aIsDigit && bIsDigit) return -1;
+          if (aIsDigit && bIsDigit) return bName.compareTo(aName);
+
+          // 字母优先（降序）
+          if (aIsLetter && !bIsLetter) return -1;
+          if (!aIsLetter && bIsLetter) return 1;
+          if (aIsLetter && bIsLetter)
+            return bName.toLowerCase().compareTo(aName.toLowerCase());
+
+          // 然后是中文（降序）
+          return bName.compareTo(aName);
+        });
+        break;
+
+      case "数字开头升序":
+        print("零件数字开头升序");
+        entries.sort((a, b) {
+          String aName = a.value['Item_Name'] ?? '';
+          String bName = b.value['Item_Name'] ?? '';
+          bool aIsDigit =
+              aName.isNotEmpty && aName[0].contains(RegExp(r'[0-9]'));
+          bool bIsDigit =
+              bName.isNotEmpty && bName[0].contains(RegExp(r'[0-9]'));
+          bool aIsLetter = aName.isNotEmpty &&
+              aName[0].toLowerCase().contains(RegExp(r'[a-z]'));
+          bool bIsLetter = bName.isNotEmpty &&
+              bName[0].toLowerCase().contains(RegExp(r'[a-z]'));
+
+          // 数字优先（升序）
+          if (aIsDigit && !bIsDigit) return -1;
+          if (!aIsDigit && bIsDigit) return 1;
+          if (aIsDigit && bIsDigit) {
+            int aNum =
+                int.tryParse(aName.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+            int bNum =
+                int.tryParse(bName.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+            return aNum.compareTo(bNum);
+          }
+
+          // 然后是字母（升序）
+          if (aIsLetter && !bIsLetter) return -1;
+          if (!aIsLetter && bIsLetter) return 1;
+          if (aIsLetter && bIsLetter)
+            return aName.toLowerCase().compareTo(bName.toLowerCase());
+
+          // 最后是中文（升序）
+          return aName.compareTo(bName);
+        });
+        break;
+
+      case "数字开头降序":
+        print("零件数字开头降序");
+        entries.sort((a, b) {
+          String aName = a.value['Item_Name'] ?? '';
+          String bName = b.value['Item_Name'] ?? '';
+          bool aIsDigit =
+              aName.isNotEmpty && aName[0].contains(RegExp(r'[0-9]'));
+          bool bIsDigit =
+              bName.isNotEmpty && bName[0].contains(RegExp(r'[0-9]'));
+          bool aIsLetter = aName.isNotEmpty &&
+              aName[0].toLowerCase().contains(RegExp(r'[a-z]'));
+          bool bIsLetter = bName.isNotEmpty &&
+              bName[0].toLowerCase().contains(RegExp(r'[a-z]'));
+
+          // 数字优先（降序）
+          if (aIsDigit && !bIsDigit) return -1;
+          if (!aIsDigit && bIsDigit) return 1;
+          if (aIsDigit && bIsDigit) {
+            int aNum =
+                int.tryParse(aName.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+            int bNum =
+                int.tryParse(bName.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+            return bNum.compareTo(aNum);
+          }
+
+          // 然后是字母（降序）
+          if (aIsLetter && !bIsLetter) return -1;
+          if (!aIsLetter && bIsLetter) return 1;
+          if (aIsLetter && bIsLetter)
+            return bName.toLowerCase().compareTo(aName.toLowerCase());
+
+          // 最后是中文（降序）
+          return bName.compareTo(aName);
+        });
+        break;
+
+      case "数量升序排序":
+        print("零件数量升序排序");
+        entries.sort((a, b) {
+          int aCount =
+              int.tryParse(a.value['Item_Count']?.toString() ?? '0') ?? 0;
+          int bCount =
+              int.tryParse(b.value['Item_Count']?.toString() ?? '0') ?? 0;
+          return aCount.compareTo(bCount);
+        });
+        break;
+
+      case "数量降序排序":
+        print("零件数量降序排序");
+        entries.sort((a, b) {
+          int aCount =
+              int.tryParse(a.value['Item_Count']?.toString() ?? '0') ?? 0;
+          int bCount =
+              int.tryParse(b.value['Item_Count']?.toString() ?? '0') ?? 0;
+          return bCount.compareTo(aCount);
+        });
+        break;
+
+      default:
+        return jsonData; // 默认保持原始顺序
+    }
+
+    // 重建排序后的Item_Data
+    Map<String, dynamic> sortedItemData = {};
+    for (var entry in entries) {
+      sortedItemData[entry.key] = entry.value;
+    }
+
+    // 返回包含排序后数据的新jsonData
+    return {
+      ...jsonData,
+      'Item_Data': sortedItemData,
+    };
+  }
+
+// 辅助函数：提取字符串开头的数字部分
+  int? extractLeadingNumber(String text) {
+    final match = RegExp(r'^\d+').firstMatch(text);
+    return match != null ? int.tryParse(match.group(0)!) : null;
   }
 
 //添加一个零件
-  Set_One_Box_Data(id, Item_Name, count, item_id) {
+  void Set_One_Box_Data(id, Item_Name, count, item_id) {
     Map<String, dynamic> jsonData = Get_One_Box_Data(id);
     jsonData['Item_Data'][item_id] = {
       'Item_Name': Item_Name,
@@ -79,19 +400,19 @@ class Box_Manager {
   }
 
   // 修改箱子名称
-  Set_Box_Name(id, name) {
+  void Set_Box_Name(id, name) {
     Map<String, dynamic> jsonData = Get_One_Box_Data(id);
     jsonData['Box_Name'] = name;
     fileManager.Set_One_File_Text(app.prj_path, id, jsonEncode(jsonData));
   }
 
 // 分享一个箱子
-  share_One_Box(String id) {
+  void share_One_Box(String id) {
     Share.shareXFiles([XFile('${app.prj_path}/$id.json')], text: "分享箱子id:$id");
   }
 
 // 删除一个箱子
-  Del_one_Box(id) {
+  void Del_one_Box(id) {
     fileManager.Del_One_File(app.prj_path, id);
   }
 

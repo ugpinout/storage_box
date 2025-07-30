@@ -17,6 +17,12 @@ class _Top_BarState extends State<Top_Bar> {
   final GlobalKey<SliderDrawerState> _sliderDrawerKey =
       GlobalKey<SliderDrawerState>();
   @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    update.Update_Box_Data(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SliderDrawer(
@@ -25,22 +31,26 @@ class _Top_BarState extends State<Top_Bar> {
           sliderKey: _sliderDrawerKey,
         ),
         appBar: SliderAppBar(
-          trailing: InkWell(
-            child: const Icon(
-              Icons.search,
-              size: 30.0,
+          config: SliderAppBarConfig(
+            padding: EdgeInsets.only(top: 15),
+            backgroundColor: Colors.yellow,
+            trailing: InkWell(
+              child: const Icon(
+                Icons.search,
+                size: 30.0,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const Search_Page()));
+              },
             ),
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Search_Page()));
-            },
-          ),
-          appBarColor: Colors.yellow,
-          title: const Text(
-            '收纳盒',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20,
+            title: const Text(
+              textAlign: TextAlign.center,
+              '收纳盒',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
             ),
           ),
         ),

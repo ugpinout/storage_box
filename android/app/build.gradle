@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "com.Flutter.Material.Box"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion '25.2.9519653'
 
     compileOptions {
         // 设置为 JDK 23 的 Java 版本

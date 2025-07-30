@@ -1,11 +1,12 @@
-// ignore_for_file: file_names, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: file_names, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, non_constant_identifier_names, strict_top_level_inference, camel_case_types
 import 'package:flutter/material.dart';
+import 'package:storage_box/module/app.dart';
 import 'package:storage_box/module/toast.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import '../module/FileManager.dart';
-import '../module/app.dart';
 import '../Box.dart';
+import 'package:storage_box/main.dart' hide app, update;
 
 File_Manager fileManager = File_Manager();
 
@@ -20,12 +21,17 @@ class Image_Box extends StatefulWidget {
 
 class _Image_BoxState extends State<Image_Box> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // 使用 listen: true 监听数据变化
+    final boxData = Provider.of<App>(context).Box_data;
+    final boxNames = boxData.keys.toList();
+
+    if (boxNames.isEmpty) {
+      // 如果数据为空，可能是加载中或确实没有数据
+      return Center(child: CircularProgressIndicator());
+    }
+
+    app.notifyListeners();
     return GridView.builder(
       padding: const EdgeInsets.all(5),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -40,8 +46,8 @@ class _Image_BoxState extends State<Image_Box> {
         return GestureDetector(
             onTap: () {
               //箱子单击事件
-              String id = Provider.of<App>(context, listen: false).Box_data[
-                  Provider.of<App>(context, listen: false).Box_Name[index]]!;
+              String id = Provider.of<App>(context, listen: false)
+                  .Box_data[boxNames[index]]!;
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => Box_Item(
                         names: id,
@@ -50,8 +56,8 @@ class _Image_BoxState extends State<Image_Box> {
             },
             onLongPress: () {
               //箱子长按事件
-              String id = Provider.of<App>(context, listen: false).Box_data[
-                  Provider.of<App>(context, listen: false).Box_Name[index]]!;
+              String id = Provider.of<App>(context, listen: false)
+                  .Box_data[boxNames[index]]!;
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -149,7 +155,7 @@ class _Image_BoxState extends State<Image_Box> {
                           child: Container(
                             margin: const EdgeInsets.only(top: 10),
                             child: Text(
-                              Provider.of<App>(context).Box_Name[index],
+                              boxNames[index],
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 10.0,
